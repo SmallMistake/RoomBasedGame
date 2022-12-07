@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class Timer : MonoBehaviour
 {
+    public delegate void TimerFinished();
+    public static TimerFinished timerFinished;
     public TimeSection timeSection = new TimeSection();
     private float timeLeft;
     public TextMeshProUGUI timerText;
@@ -24,8 +24,8 @@ public class Timer : MonoBehaviour
         else
         {
             timeLeft = 0;
+            timerFinished.Invoke();
         }
-
         DisplayTime(timeLeft);
     }
 

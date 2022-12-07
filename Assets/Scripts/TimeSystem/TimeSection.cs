@@ -2,15 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class TimeSection
 {
-    public float lengthInSeconds = 60;//300;
+    public float lengthInSeconds = 30;//300;
     public float startTime = 19 * 3600;// 7PM       //Used to convert from seconds to AM PM
     public float endTime = 24 * 3600; // Midnight
 
     private float lengthOfDayTime;
     private float timeMultipler;
+
+    private int currentHour = - 1;
 
     //time = (hour x 3600 + minutes x 60 + seconds ) / 86400. Formula For Time
 
@@ -42,7 +45,21 @@ public class TimeSection
             timePeriod = "AM";
         }
 
+        CheckIfNeedToPlayHourChime(hours);
+
         //string.Format("{0:00}:{1:00} {}", hours, minutes, timePeriod);
         return $"{hours.ToString("00")}:{minutes.ToString("00")} {timePeriod}";
+    }
+
+    private void CheckIfNeedToPlayHourChime(int hours)
+    {
+        if(currentHour == -1)
+        {
+            currentHour = hours;
+        }
+        else if (currentHour != hours){
+            currentHour = hours;
+            RuntimeManager.PlayOneShot("event:/HourChime");
+        }
     }
 }
